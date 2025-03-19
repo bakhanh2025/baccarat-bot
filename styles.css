@@ -1,0 +1,115 @@
+.mt20 {
+    margin-top: 20px;
+}
+
+.roadmap-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-x: auto;
+}
+
+.roadmap {
+    border: 1px solid #ddd;
+    padding: 10px;
+    min-width: 220px;
+}
+
+.roadmap-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.cell {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.player {
+    background-color: blue;
+    color: white;
+    font-size: 12px;
+}
+
+.banker {
+    background-color: red;
+    color: white;
+    font-size: 12px;
+}
+
+.tier {
+    background-color: #146c43;
+    color: white;
+    font-size: 12px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.map-container {
+    display: flex;
+    flex-direction: row;
+    /* Mặc định nằm ngang */
+    gap: 10px;
+}
+
+.map-box1 {
+    flex: 0 0 30%;
+    /* Chiếm 40% */
+    padding: 20px;
+    text-align: center;
+}
+
+.map-box2 {
+    flex: 0 0 70%;
+    /* Chiếm 60% */
+    padding: 20px;
+    text-align: center;
+}
+
+.add-roadmap {
+    width: 20%;
+}
+
+/* Khi màn hình nhỏ (dưới 768px), đổi sang dạng dọc */
+@media (max-width: 768px) {
+    .map-container {
+        flex-direction: column;
+    }
+
+    .map-box1,
+    .map-box2 {
+        flex: 0 0 100%;
+        /* Cả hai div chiếm 100% khi mobile */
+    }
+
+    .add-roadmap {
+        width: 25%;
+    }
+}
+
+.gr-btns-table {
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+}
