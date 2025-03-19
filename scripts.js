@@ -291,11 +291,9 @@ function saveLocalStorage() {
 function loadLocalStorage() {
     let roadmapDataTemp = localStorage.getItem(roadmapDataKey);
     if (roadmapDataTemp) roadmapData = JSON.parse(roadmapDataTemp);
-    console.log("roadmapData: ", roadmapData);
 
     let roadmapMatrixTemp = localStorage.getItem(roadmapMatrixKey);
     if (roadmapMatrixTemp) roadmapMatrix = JSON.parse(roadmapMatrixTemp);
-    console.log("roadmapMatrix: ", roadmapMatrix);
 }
 
 function clearLocalStorage() {
