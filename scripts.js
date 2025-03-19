@@ -31,6 +31,7 @@ $(document).on("click", "#add-roadmap", function () {
     roadmapData[roadmapCount] = [];
     roadmapMatrix[roadmapCount] = [];
     addHTMLRoadMap(roadmapCount);
+    saveLocalStorage();
 });
 
 function addHTMLRoadMap(roadmapCount) {

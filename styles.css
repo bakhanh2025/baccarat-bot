@@ -2,6 +2,14 @@
     margin-top: 20px;
 }
 
+.ml20 {
+    margin-left: 20px;
+}
+
+.mr20 {
+    margin-right: 20px;
+}
+
 .roadmap-container {
     display: flex;
     flex-direction: column;
@@ -69,8 +77,13 @@
 .map-container {
     display: flex;
     flex-direction: row;
-    /* Mặc định nằm ngang */
-    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    /* Custom Scrollbar */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 .map-box1 {
