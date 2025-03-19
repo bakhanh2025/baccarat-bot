@@ -108,8 +108,19 @@
     }
 }
 
-.gr-btns-table {
+.header-card {
     display: flex;
     gap: 6px;
     justify-content: space-between;
+}
+
+.btn-deleteTable {
+    background-color: white;
+    color: red;
+    border-radius: 50%;
+}
+
+.action-bnt-gr {
+    display: flex;
+    gap: 32px;
 }

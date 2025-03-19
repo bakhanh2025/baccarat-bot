@@ -36,24 +36,49 @@ $(document).on("click", "#add-roadmap", function () {
 function addHTMLRoadMap(roadmapCount) {
     let roadmapHtml = `
             <div class="roadmap" id="roadmap-${roadmapCount}">
-                <h6>Bàn ${roadmapCount}</h6>
-                <div class="buttons mb-2 gr-btns-table">
-                    <div class="left-btn">
-                      <button class="btn btn-danger btn-sm" onclick="deleteTable('${roadmapCount}')">Xóa Bàn</button>
-                    </div>
-                    <div class="right-btn">
-                      <button class="btn btn-primary btn-sm add-cell" data-type="player" data-id="${roadmapCount}">Player</button>
-                      <button class="btn btn-danger btn-sm add-cell" data-type="banker" data-id="${roadmapCount}">Banker</button>
-                      <button class="btn btn-success btn-sm add-cell" data-type="tier" data-id="${roadmapCount}">Tier</button>
+                <div class="header-card">
+                    <h6>Bàn ${roadmapCount}</h6>
+                    <div class="action-bnt-gr">
+                        <div class="del-btn-gr">
+                            <button class="btn btn-danger btn-sm" onclick="deleteTable('${roadmapCount}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <button class="btn btn-warning btn-sm del-last-cell" data-id="${roadmapCount}">
+                                <i class="bi bi-backspace"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-sm add-cell" data-type="player" data-id="${roadmapCount}">Player</button>
+                            <button class="btn btn-danger btn-sm add-cell" data-type="banker" data-id="${roadmapCount}">Banker</button>
+                            <button class="btn btn-success btn-sm add-cell" data-type="tier" data-id="${roadmapCount}">Tier</button>
+                        </div>
                     </div>
                 </div>
                 <div class="map-container">
-                  <div class="map-box1 roadmap-view d-flex" data-id="${roadmapCount}"></div>
+                  <div class="map-box1 roadmap-view d-flex" id="roadmap-view-${roadmapCount}" data-id="${roadmapCount}"></div>
                   <div class="map-box2" id="roadmap-container-matrix-${roadmapCount}"></div>
                 </div>
             </div>`;
     $("#roadmaps").append(roadmapHtml);
 }
+
+$(document).on("click", ".del-last-cell", function () {
+    let roadmapId = $(this).data("id");
+
+    roadmapData[roadmapId].pop();
+    roadmapMatrix[roadmapId] = convertToMatrix(
+        roadmapData[roadmapId].map((cell) => cell.type)
+    );
+    saveLocalStorage();
+
+    $(`#roadmap-view-${roadmapId}`).empty();
+    $(`#roadmap-container-matrix-${roadmapId}`).empty();
+
+    roadmapData[roadmapId].forEach((item) => {
+        renderRoadmapCell(roadmapId, item.type);
+    });
+    renderRoadmap(roadmapId, roadmapMatrix[roadmapId]);
+});
 
 $(document).on("click", ".add-cell", function () {
     let type = $(this).data("type");
@@ -61,7 +86,6 @@ $(document).on("click", ".add-cell", function () {
 
     renderRoadmapCell(roadmapId, type);
 
-    // Lưu dữ liệu vào roadmapData
     roadmapData[roadmapId].push({ type: type });
     roadmapMatrix[roadmapId] = convertToMatrix(
         roadmapData[roadmapId].map((cell) => cell.type)
@@ -148,15 +172,37 @@ function renderRoadmap(index, matrix) {
 }
 
 $(document).on("click", "#delete-all", function () {
-    clearLocalStorage();
-    location.reload();
+    Swal.fire({
+        title: "Bạn có chắc chắn?",
+        text: "Hành động này không thể hoàn tác!",
+        icon: "error",
+        showCancelButton: true,
+        confirmButtonText: "Đồng ý",
+        cancelButtonText: "Hủy"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            clearLocalStorage();
+            location.reload();
+        }
+    });
 });
 
 function deleteTable(indexTable) {
-    delete roadmapData[indexTable];
-    delete roadmapMatrix[indexTable];
-    saveLocalStorage();
-    $(`#roadmap-${indexTable}`).remove();
+    Swal.fire({
+        title: "Bạn có chắc chắn?",
+        text: "Hành động này không thể hoàn tác!",
+        icon: "error",
+        showCancelButton: true,
+        confirmButtonText: "Đồng ý",
+        cancelButtonText: "Hủy"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            delete roadmapData[indexTable];
+            delete roadmapMatrix[indexTable];
+            saveLocalStorage();
+            $(`#roadmap-${indexTable}`).remove();
+        }
+    });
 }
 
 //   $(document).on("click", ".cell", function (event) {
