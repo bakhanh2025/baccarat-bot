@@ -12,8 +12,7 @@ function init() {
 }
 
 $(document).on("click", "#check-roadmap", function () {
-    console.log(roadmapData);
-    console.log(roadmapMatrix);
+    sendMessage('Hello Test');
 });
 
 $(document).on("click", "#add-roadmap", function () {
@@ -333,3 +332,31 @@ document.head.insertAdjacentHTML(
             </style>
         `
 );
+
+function sendMessage(message) {
+    var botToken = "7979510335:AAGHSa1HX8fjU5sGsEmNKfQCkYYFME_wqm0";
+    var chatId = "-1002575025787";
+
+    var url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: {
+            chat_id: chatId,
+            text: message,
+            parse_mode: "Markdown"
+        },
+        success: function (response) {
+            console.log("Tin nhắn đã gửi!", response);
+        },
+        error: function (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Không thể gửi tin nhắn! Vui lòng thử lại."
+            });
+            console.error("Lỗi gửi tin nhắn!", error);
+        }
+    });
+}
