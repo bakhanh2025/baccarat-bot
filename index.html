@@ -20,6 +20,65 @@
   </head>
   <body>
     <div class="ml20 mt20 mr20">
+      <div class="roadmap-container">
+        <div class="roadmap" id="roadmap-${roadmapCount}">
+          <div class="header-card">
+            <h6>Kết quả</h6>
+          </div>
+          <div class="map-container">
+            <div class="map-box2 result">
+              <div class="result-item">
+                <label class="lbl">2 Lỗ đóng lại</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">Xanh 4 đóng</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">3 Lỗ đóng lại</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">Đỏ 4 đóng</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">3 Xanh đóng lại</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">2 Xanh trượt</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">3 Đỏ đóng lại</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">2 Đỏ trươt</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+              <div class="result-item">
+                <label class="lbl">Đỏ 1 lỗ</label>
+                <label class="lbl-result">0</label>
+                <label>(lần)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ml20 mt20 mr20">
       <div class="roadmap-container" id="roadmaps"></div>
     </div>
 
@@ -28,6 +87,7 @@
       <!-- <button id="check-roadmap" class="btn btn-primary btn-sm">
         Kiểm Tra
       </button> -->
+
       <div class="input-group input-group-sm add-roadmap">
         <input
           type="text"
@@ -39,6 +99,13 @@
           Tạo
         </button>
       </div>
+      <button
+        class="btn btn-success btn-sm del-last-cell"
+        onclick="sendMessageToTelegram()"
+      >
+        <i class="bi bi-send"></i>
+        Gửi Message
+      </button>
     </div>
   </body>
 </html>
