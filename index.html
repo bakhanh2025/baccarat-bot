@@ -24,7 +24,19 @@
         <div class="roadmap" id="roadmap-${roadmapCount}">
           <div class="header-card">
             <h6>Kết quả</h6>
+            <div class="action-bnt-gr">
+              <div class="del-btn-gr">
+                <button
+                  class="btn btn-success btn-sm del-last-cell"
+                  onclick="sendMessageToTelegram()"
+                >
+                  <i class="bi bi-send"></i>
+                  Gửi
+                </button>
+              </div>
+            </div>
           </div>
+          <hr style="margin-top: 10px" />
           <div class="map-container">
             <div class="map-box2 result">
               <div class="result-item">
@@ -99,13 +111,6 @@
           Tạo
         </button>
       </div>
-      <button
-        class="btn btn-success btn-sm del-last-cell"
-        onclick="sendMessageToTelegram()"
-      >
-        <i class="bi bi-send"></i>
-        Gửi Message
-      </button>
     </div>
   </body>
 </html>
