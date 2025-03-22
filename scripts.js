@@ -1,6 +1,8 @@
 let roadmapCount;
 let roadmapData = {};
 let roadmapMatrix = {};
+let result = {};
+let sumResult = [];
 
 $(document).ready(function () {
     init();
@@ -9,12 +11,15 @@ $(document).ready(function () {
 function init() {
     loadLocalStorage();
     renderRoadmapFromLocalStorage();
+    displayResult();
 }
 
 $(document).on("click", "#check-roadmap", function () {
     console.log(JSON.stringify(roadmapMatrix[1]));
     calMethod1(roadmapMatrix[1]);
     calMethod2(roadmapMatrix[1]);
+    console.log(JSON.stringify(result));
+    console.log(sumResult);
     // sendMessage('Hello Test');
 });
 
@@ -30,6 +35,7 @@ $(document).on("click", "#add-roadmap", function () {
     }
     $("#txtIndexTable").val("");
 
+    result[roadmapCount] = new Array(9);
     roadmapData[roadmapCount] = [];
     roadmapMatrix[roadmapCount] = [];
     addHTMLRoadMap(roadmapCount);
@@ -63,24 +69,6 @@ function addHTMLRoadMap(roadmapCount) {
     $("#roadmaps").append(roadmapHtml);
 }
 
-$(document).on("click", ".del-last-cell", function () {
-    let roadmapId = $(this).data("id");
-
-    roadmapData[roadmapId].pop();
-    roadmapMatrix[roadmapId] = convertToMatrix(
-        roadmapData[roadmapId].map((cell) => cell.type)
-    );
-    saveLocalStorage();
-
-    $(`#roadmap-view-${roadmapId}`).empty();
-    $(`#roadmap-container-matrix-${roadmapId}`).empty();
-
-    roadmapData[roadmapId].forEach((item) => {
-        renderRoadmapCell(roadmapId, item.type);
-    });
-    renderRoadmap(roadmapId, roadmapMatrix[roadmapId]);
-});
-
 $(document).on("click", ".add-cell", function () {
     let type = $(this).data("type");
     let roadmapId = $(this).data("id");
@@ -91,8 +79,36 @@ $(document).on("click", ".add-cell", function () {
     roadmapMatrix[roadmapId] = convertToMatrix(
         roadmapData[roadmapId].map((cell) => cell.type)
     );
-    saveLocalStorage();
     renderRoadmap(roadmapId, roadmapMatrix[roadmapId]);
+
+    calMatrix(roadmapId);
+    sumMatrix();
+    displayResult();
+
+    saveLocalStorage();
+});
+
+$(document).on("click", ".del-last-cell", function () {
+    let roadmapId = $(this).data("id");
+
+    roadmapData[roadmapId].pop();
+    roadmapMatrix[roadmapId] = convertToMatrix(
+        roadmapData[roadmapId].map((cell) => cell.type)
+    );
+
+    $(`#roadmap-view-${roadmapId}`).empty();
+    $(`#roadmap-container-matrix-${roadmapId}`).empty();
+
+    roadmapData[roadmapId].forEach((item) => {
+        renderRoadmapCell(roadmapId, item.type);
+    });
+    renderRoadmap(roadmapId, roadmapMatrix[roadmapId]);
+
+    calMatrix(roadmapId);
+    sumMatrix();
+    displayResult();
+
+    saveLocalStorage();
 });
 
 function renderRoadmapCell(roadmapId, type) {
@@ -182,6 +198,7 @@ $(document).on("click", "#delete-all", function () {
         cancelButtonText: "Hủy"
     }).then((result) => {
         if (result.isConfirmed) {
+            clearAllResult();
             clearLocalStorage();
             location.reload();
         }
@@ -196,10 +213,13 @@ function deleteTable(indexTable) {
         showCancelButton: true,
         confirmButtonText: "Đồng ý",
         cancelButtonText: "Hủy"
-    }).then((result) => {
-        if (result.isConfirmed) {
+    }).then((resultObj) => {
+        if (resultObj.isConfirmed) {
             delete roadmapData[indexTable];
             delete roadmapMatrix[indexTable];
+            delete result[indexTable];
+            sumMatrix();
+            displayResult();
             saveLocalStorage();
             $(`#roadmap-${indexTable}`).remove();
         }
@@ -272,34 +292,10 @@ function deleteTable(indexTable) {
 //     event.stopPropagation();
 //   });
 
-function renderRoadmapFromLocalStorage() {
-    for (key in roadmapData) {
-        addHTMLRoadMap(key);
-        roadmapData[key].forEach((item) => {
-            renderRoadmapCell(key, item.type);
-        });
-        renderRoadmap(key, roadmapMatrix[key]);
+function clearAllResult() {
+    for (let i = 0; i < 9; i++) {
+        $(`#val${i}`).text("0");
     }
-}
-
-let roadmapDataKey = "roadmapDataKey";
-let roadmapMatrixKey = "roadmapMatrixKey";
-function saveLocalStorage() {
-    localStorage.setItem(roadmapDataKey, JSON.stringify(roadmapData));
-    localStorage.setItem(roadmapMatrixKey, JSON.stringify(roadmapMatrix));
-}
-
-function loadLocalStorage() {
-    let roadmapDataTemp = localStorage.getItem(roadmapDataKey);
-    if (roadmapDataTemp) roadmapData = JSON.parse(roadmapDataTemp);
-
-    let roadmapMatrixTemp = localStorage.getItem(roadmapMatrixKey);
-    if (roadmapMatrixTemp) roadmapMatrix = JSON.parse(roadmapMatrixTemp);
-}
-
-function clearLocalStorage() {
-    localStorage.removeItem(roadmapDataKey);
-    localStorage.removeItem(roadmapMatrixKey);
 }
 
 function getColorClass(type) {
@@ -312,54 +308,61 @@ function getColorClass(type) {
                 : "";
 }
 
-document.head.insertAdjacentHTML(
-    "beforeend",
-    `
-            <style>
-                .circle {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    display: inline-block;
-                }
-                .circle-player { border: 2px solid blue; background-color: #FFFFFF; }
-                .circle-banker { border: 2px solid red; background-color: #FFFFFF; }
-                .circle-tier { border: 2px solid #146c43; background-color: #FFFFFF; }
-                .table td {
-                    width: 40px;
-                    height: 40px;
-                    vertical-align: middle;
-                }
-            </style>
-        `
-);
+function calMatrix(roadmapIndex) {
+    let count = calMethod1(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][0] = count;
 
-function sendMessage(message) {
-    var botToken = "7979510335:AAGHSa1HX8fjU5sGsEmNKfQCkYYFME_wqm0";
-    var chatId = "-1002575025787";
+    count = calMethod2(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][1] = count;
 
-    var url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    count = calMethod3(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][2] = count;
 
-    $.ajax({
-        url: url,
-        method: "POST",
-        data: {
-            chat_id: chatId,
-            text: message,
-            parse_mode: "Markdown"
-        },
-        success: function (response) {
-            console.log("Tin nhắn đã gửi!", response);
-        },
-        error: function (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Không thể gửi tin nhắn! Vui lòng thử lại."
-            });
-            console.error("Lỗi gửi tin nhắn!", error);
+    count = calMethod4(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][3] = count;
+
+    count = calMethod5(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][4] = count;
+
+    count = calMethod6(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][5] = count;
+
+    count = calMethod7(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][6] = count;
+
+    count = calMethod8(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][7] = count;
+
+    count = calMethod9(roadmapMatrix[roadmapIndex]);
+    result[roadmapIndex][8] = count;
+}
+
+function sumMatrix() {
+    const rows = Object.values(result);
+    if (!rows[0]) rows[0] = new Array(9);
+
+    const numCols = rows[0].length;
+
+    const colSums = Array(numCols).fill(0);
+
+    for (let col = 0; col < numCols; col++) {
+        for (let row = 0; row < rows.length; row++) {
+            const value = rows[row][col];
+            if (typeof value === 'number') {
+                colSums[col] += value;
+            }
         }
-    });
+    }
+
+    console.log("Tổng từng cột:", colSums);
+    sumResult = colSums;
+    return sumResult;
+}
+
+function displayResult() {
+    for (let i = 0; i < sumResult.length; i++) {
+        $(`#val${i}`).text(sumResult[i]);
+    }
 }
 
 function calMethod1(matrix) {
@@ -430,3 +433,132 @@ function calMethod2(matrix) {
     console.log("Vị trí bắt đầu (col):", patternPositions);
     return count;
 }
+
+function calMethod3(matrix) {
+    let count = 0;
+    return count;
+}
+
+function calMethod4(matrix) {
+    let count = 0;
+    return count;
+}
+
+function calMethod5(matrix) {
+    let count = 0;
+    return count;
+}
+
+function calMethod6(matrix) {
+    let count = 0;
+    return count;
+}
+
+function calMethod7(matrix) {
+    let count = 0;
+    return count;
+}
+
+function calMethod8(matrix) {
+    let count = 0;
+    return count;
+}
+
+function calMethod9(matrix) {
+    let count = 0;
+    return count;
+}
+
+function sendMessage(message) {
+    var botToken = "7979510335:AAGHSa1HX8fjU5sGsEmNKfQCkYYFME_wqm0";
+    var chatId = "-1002575025787";
+
+    var url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: {
+            chat_id: chatId,
+            text: message,
+            parse_mode: "Markdown"
+        },
+        success: function (response) {
+            console.log("Tin nhắn đã gửi!", response);
+        },
+        error: function (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Không thể gửi tin nhắn! Vui lòng thử lại."
+            });
+            console.error("Lỗi gửi tin nhắn!", error);
+        }
+    });
+}
+
+let roadmapDataKey = "roadmapDataKey";
+let roadmapMatrixKey = "roadmapMatrixKey";
+let resultKey = "resultKey";
+let sumResultKey = "sumResultKey";
+
+function renderRoadmapFromLocalStorage() {
+    for (key in roadmapData) {
+        addHTMLRoadMap(key);
+        roadmapData[key].forEach((item) => {
+            renderRoadmapCell(key, item.type);
+        });
+        renderRoadmap(key, roadmapMatrix[key]);
+        if (!result[key]) result[key] = new Array(9)
+    }
+}
+
+function saveLocalStorage() {
+    localStorage.setItem(roadmapDataKey, JSON.stringify(roadmapData));
+    localStorage.setItem(roadmapMatrixKey, JSON.stringify(roadmapMatrix));
+    localStorage.setItem(resultKey, JSON.stringify(result));
+    localStorage.setItem(sumResultKey, JSON.stringify(sumResult));
+}
+
+function loadLocalStorage() {
+    let roadmapDataTemp = localStorage.getItem(roadmapDataKey);
+    if (roadmapDataTemp) roadmapData = JSON.parse(roadmapDataTemp);
+
+    let roadmapMatrixTemp = localStorage.getItem(roadmapMatrixKey);
+    if (roadmapMatrixTemp) roadmapMatrix = JSON.parse(roadmapMatrixTemp);
+
+    let resultTemp = localStorage.getItem(resultKey);
+    if (resultTemp) result = JSON.parse(resultTemp);
+
+    let sumResultTemp = localStorage.getItem(sumResultKey);
+    if (sumResultTemp) sumResult = JSON.parse(sumResultTemp);
+}
+
+function clearLocalStorage() {
+    localStorage.removeItem(roadmapDataKey);
+    localStorage.removeItem(roadmapMatrixKey);
+    localStorage.removeItem(resultKey);
+    localStorage.removeItem(sumResultKey);
+}
+
+document.head.insertAdjacentHTML(
+    "beforeend",
+    `
+            <style>
+                .circle {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    display: inline-block;
+                }
+                .circle-player { border: 2px solid blue; background-color: #FFFFFF; }
+                .circle-banker { border: 2px solid red; background-color: #FFFFFF; }
+                .circle-tier { border: 2px solid #146c43; background-color: #FFFFFF; }
+                .table td {
+                    width: 40px;
+                    height: 40px;
+                    vertical-align: middle;
+                }
+            </style>
+        `
+);
