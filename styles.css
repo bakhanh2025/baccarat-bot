@@ -10,19 +10,6 @@
     margin-right: 20px;
 }
 
-.roadmap-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    overflow-x: auto;
-}
-
-.roadmap {
-    border: 1px solid #ddd;
-    padding: 10px;
-    min-width: 220px;
-}
-
 .roadmap-column {
     display: flex;
     flex-direction: column;
@@ -93,13 +80,6 @@
     text-align: center;
 }
 
-.map-box2 {
-    flex: 0 0 70%;
-    /* Chiếm 60% */
-    padding: 20px;
-    text-align: center;
-}
-
 .add-roadmap {
     width: 20%;
 }
@@ -111,10 +91,6 @@
     }
 
     .map-box1,
-    .map-box2 {
-        flex: 0 0 100%;
-        /* Cả hai div chiếm 100% khi mobile */
-    }
 
     .add-roadmap {
         width: 25%;
@@ -136,4 +112,34 @@
 .action-bnt-gr {
     display: flex;
     gap: 32px;
+}
+
+.roadmap-container {
+    display: flex;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    gap: 1rem;
+    /* khoảng cách giữa các box */
+    flex-wrap: wrap;
+    /* cho phép xuống dòng nếu cần */
+}
+
+/* Các box chiếm nửa chiều rộng màn hình khi rộng */
+.roadmap {
+    flex: 1 1 45%;
+    min-width: 300px;
+    max-width: 49%;
+    /* để box không quá nhỏ trên màn hình nhỏ */
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* Trên màn hình nhỏ (dưới 768px), các box sẽ chiếm toàn bộ hàng */
+@media (max-width: 1024px) {
+    .roadmap {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
 }

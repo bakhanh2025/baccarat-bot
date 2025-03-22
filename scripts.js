@@ -12,7 +12,10 @@ function init() {
 }
 
 $(document).on("click", "#check-roadmap", function () {
-    sendMessage('Hello Test');
+    console.log(JSON.stringify(roadmapMatrix[1]));
+    calMethod1(roadmapMatrix[1]);
+    calMethod2(roadmapMatrix[1]);
+    // sendMessage('Hello Test');
 });
 
 $(document).on("click", "#add-roadmap", function () {
@@ -50,12 +53,10 @@ function addHTMLRoadMap(roadmapCount) {
                         <div>
                             <button class="btn btn-primary btn-sm add-cell" data-type="player" data-id="${roadmapCount}">Player</button>
                             <button class="btn btn-danger btn-sm add-cell" data-type="banker" data-id="${roadmapCount}">Banker</button>
-                            <button class="btn btn-success btn-sm add-cell" data-type="tier" data-id="${roadmapCount}">Tier</button>
                         </div>
                     </div>
                 </div>
-                <div class="map-container">
-                  <div class="map-box1 roadmap-view d-flex" id="roadmap-view-${roadmapCount}" data-id="${roadmapCount}"></div>
+                <div class="map-container mt20">
                   <div class="map-box2" id="roadmap-container-matrix-${roadmapCount}"></div>
                 </div>
             </div>`;
@@ -359,4 +360,73 @@ function sendMessage(message) {
             console.error("Lỗi gửi tin nhắn!", error);
         }
     });
+}
+
+function calMethod1(matrix) {
+    // 2 lỗ đóng lại
+    let count = 0;
+    let patternPositions = [];
+
+    for (let col = 1; col < matrix[0].length - 2; col++) {
+        const topPrev = matrix[0][col - 1];
+        const botPrev = matrix[1][col - 1];
+
+        const top1 = matrix[0][col];
+        const top2 = matrix[0][col + 1];
+        const bot1 = matrix[1][col];
+        const bot2 = matrix[1][col + 1];
+
+        const topNext = matrix[0][col + 2];
+        const botNext = matrix[1][col + 2];
+
+        if (
+            top1 !== "" && top2 !== "" &&         // điều kiện 1
+            bot1 === "" && bot2 === "" &&         // điều kiện 2
+            topNext !== "" && botNext !== "" &&   // điều kiện 3
+            topPrev !== "" && botPrev !== ""      // điều kiện 4
+        ) {
+            count++;
+            patternPositions.push(col);
+        }
+    }
+
+    console.log("Số pattern thỏa tất cả điều kiện:", count);
+    console.log("Vị trí bắt đầu (col):", patternPositions);
+
+    return count;
+}
+
+function calMethod2(matrix) {
+    // 3 lỗ đóng lại
+    let count = 0;
+    let patternPositions = [];
+
+    for (let col = 1; col < matrix[0].length - 3; col++) {
+        const topPrev = matrix[0][col - 1];
+        const botPrev = matrix[1][col - 1];
+
+        const top1 = matrix[0][col];
+        const top2 = matrix[0][col + 1];
+        const top3 = matrix[0][col + 2];
+        const bot1 = matrix[1][col];
+        const bot2 = matrix[1][col + 1];
+        const bot3 = matrix[1][col + 2];
+
+        const topNext = matrix[0][col + 3];
+        const botNext = matrix[1][col + 3];
+
+        if (
+            top1 !== "" && top2 !== "" && top3 !== "" &&    // điều kiện 1
+            bot1 === "" && bot2 === "" && bot3 === "" &&    // điều kiện 2
+            topNext !== "" && botNext !== "" &&             // điều kiện 3
+            topPrev !== "" && botPrev !== ""                // điều kiện 4
+        ) {
+            count++;
+            patternPositions.push(col);
+        }
+    }
+
+    console.log("Số pattern (3 cột liên tiếp) thỏa điều kiện:", count);
+    console.log("Vị trí bắt đầu (col):", patternPositions);
+    return count;
 }
