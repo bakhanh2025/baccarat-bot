@@ -366,34 +366,36 @@ function displayResult() {
 }
 
 function calMethod1(matrix) {
-    // 2 lỗ đóng lại
     let count = 0;
     let patternPositions = [];
 
-    for (let col = 1; col < matrix[0].length - 2; col++) {
-        const topPrev = matrix[0][col - 1];
-        const botPrev = matrix[1][col - 1];
-
+    for (let col = 0; col < matrix[0].length - 1; col++) {
         const top1 = matrix[0][col];
         const top2 = matrix[0][col + 1];
         const bot1 = matrix[1][col];
         const bot2 = matrix[1][col + 1];
 
-        const topNext = matrix[0][col + 2];
-        const botNext = matrix[1][col + 2];
+        const hasTopPrev = col > 0;
+        const hasTopNext = col + 2 < matrix[0].length;
 
-        if (
-            top1 !== "" && top2 !== "" &&         // điều kiện 1
-            bot1 === "" && bot2 === "" &&         // điều kiện 2
-            topNext !== "" && botNext !== "" &&   // điều kiện 3
-            topPrev !== "" && botPrev !== ""      // điều kiện 4
-        ) {
+        const topPrev = hasTopPrev ? matrix[0][col - 1] : null;
+        const botPrev = hasTopPrev ? matrix[1][col - 1] : null;
+
+        const topNext = hasTopNext ? matrix[0][col + 2] : null;
+        const botNext = hasTopNext ? matrix[1][col + 2] : null;
+
+        const cond1 = top1 !== "" && top2 !== "";
+        const cond2 = bot1 === "" && bot2 === "";
+        const cond3 = !hasTopNext || (topNext !== "" && botNext !== "");
+        const cond4 = !hasTopPrev || (topPrev !== "" && botPrev !== "");
+
+        if (cond1 && cond2 && cond3 && cond4) {
             count++;
             patternPositions.push(col);
         }
     }
 
-    console.log("Số pattern thỏa tất cả điều kiện:", count);
+    console.log("Số pattern thỏa điều kiện:", count);
     console.log("Vị trí bắt đầu (col):", patternPositions);
 
     return count;
