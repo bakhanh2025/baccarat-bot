@@ -402,14 +402,16 @@ function calMethod1(matrix) {
 }
 
 function calMethod2(matrix) {
-    // 3 lỗ đóng lại
+    // Đếm pattern 3 cột liên tiếp thỏa điều kiện
     let count = 0;
     let patternPositions = [];
 
-    for (let col = 1; col < matrix[0].length - 3; col++) {
-        const topPrev = matrix[0][col - 1];
-        const botPrev = matrix[1][col - 1];
+    for (let col = 0; col < matrix[0].length - 2; col++) {
+        // Kiểm tra có phần tử trước/sau không
+        const hasTopPrev = col > 0;
+        const hasTopNext = col + 3 < matrix[0].length;
 
+        // Lấy giá trị
         const top1 = matrix[0][col];
         const top2 = matrix[0][col + 1];
         const top3 = matrix[0][col + 2];
@@ -417,15 +419,19 @@ function calMethod2(matrix) {
         const bot2 = matrix[1][col + 1];
         const bot3 = matrix[1][col + 2];
 
-        const topNext = matrix[0][col + 3];
-        const botNext = matrix[1][col + 3];
+        const topPrev = hasTopPrev ? matrix[0][col - 1] : null;
+        const botPrev = hasTopPrev ? matrix[1][col - 1] : null;
 
-        if (
-            top1 !== "" && top2 !== "" && top3 !== "" &&    // điều kiện 1
-            bot1 === "" && bot2 === "" && bot3 === "" &&    // điều kiện 2
-            topNext !== "" && botNext !== "" &&             // điều kiện 3
-            topPrev !== "" && botPrev !== ""                // điều kiện 4
-        ) {
+        const topNext = hasTopNext ? matrix[0][col + 3] : null;
+        const botNext = hasTopNext ? matrix[1][col + 3] : null;
+
+        // Điều kiện
+        const cond1 = top1 !== "" && top2 !== "" && top3 !== "";
+        const cond2 = bot1 === "" && bot2 === "" && bot3 === "";
+        const cond3 = !hasTopNext || (topNext !== "" && botNext !== "");
+        const cond4 = !hasTopPrev || (topPrev !== "" && botPrev !== "");
+
+        if (cond1 && cond2 && cond3 && cond4) {
             count++;
             patternPositions.push(col);
         }
