@@ -10,6 +10,7 @@ $(document).ready(function () {
 
 function init() {
     loadLocalStorage();
+    displayTotalTable();
     renderRoadmapFromLocalStorage();
     displayResult();
 }
@@ -40,6 +41,7 @@ $(document).on("click", "#add-roadmap", function () {
     roadmapMatrix[roadmapCount] = [];
     addHTMLRoadMap(roadmapCount);
     saveLocalStorage();
+    displayTotalTable();
 });
 
 function addHTMLRoadMap(roadmapCount) {
@@ -221,6 +223,7 @@ function deleteTable(indexTable) {
             sumMatrix();
             displayResult();
             saveLocalStorage();
+            displayTotalTable();
             $(`#roadmap-${indexTable}`).remove();
         }
     });
@@ -477,6 +480,20 @@ function calMethod9(matrix) {
     return count;
 }
 
+function sendMessageToTelegram() {
+    let message = `Tổng số bàn: ${Object.keys(roadmapData).length} (bàn)\n` +
+        `1/ 2 lỗ đóng lại: ${sumResult[0]} (lần)\n` +
+        `2/ 3 lỗ đóng lại: ${sumResult[1]} (lần)\n` +
+        `3/ 3 Xanh đóng lại: ${sumResult[2]} (lần)\n` +
+        `4/ 3 Đỏ đóng lại: ${sumResult[3]} (lần)\n` +
+        `5/ Đỏ 1 lỗ: ${sumResult[4]} (lần)\n` +
+        `6/ Xanh 4 đóng: ${sumResult[5]} (lần)\n` +
+        `7/ Đỏ 4 đóng: ${sumResult[6]} (lần)\n` +
+        `8/ 2 Xanh trượt: ${sumResult[7]} (lần)\n` +
+        `9/ 2 Đỏ trượt: ${sumResult[8]} (lần)`;
+    sendMessage(message);
+}
+
 function sendMessage(message) {
     var botToken = "7979510335:AAGHSa1HX8fjU5sGsEmNKfQCkYYFME_wqm0";
     var chatId = "-1002575025787";
@@ -492,7 +509,11 @@ function sendMessage(message) {
             parse_mode: "Markdown"
         },
         success: function (response) {
-            console.log("Tin nhắn đã gửi!", response);
+            Swal.fire({
+                title: "Good job!",
+                text: "Tin nhắn đã gửi!",
+                icon: "success"
+            });
         },
         error: function (error) {
             Swal.fire({
@@ -547,6 +568,10 @@ function clearLocalStorage() {
     localStorage.removeItem(roadmapMatrixKey);
     localStorage.removeItem(resultKey);
     localStorage.removeItem(sumResultKey);
+}
+
+function displayTotalTable() {
+    $('.lblTotalTable').text(Object.keys(roadmapData).length);
 }
 
 document.head.insertAdjacentHTML(

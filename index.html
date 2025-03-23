@@ -23,11 +23,16 @@
       <div class="roadmap-container">
         <div class="roadmap" id="roadmap-${roadmapCount}">
           <div class="header-card">
-            <h6>Kết quả</h6>
+            <div class="tb-header">
+              <h6>Kết quả</h6>
+              <span>-</span>
+              <span class="lblTotalTable">0</span>
+              <span>bàn</span>
+            </div>
             <div class="action-bnt-gr">
               <div class="del-btn-gr">
                 <button
-                  class="btn btn-success btn-sm del-last-cell"
+                  class="btn btn-success btn-sm"
                   onclick="sendMessageToTelegram()"
                 >
                   <i class="bi bi-send"></i>
@@ -75,7 +80,7 @@
                 <label>(lần)</label>
               </div>
               <div class="result-item">
-                <label class="lbl">2 Đỏ trươt</label>
+                <label class="lbl">2 Đỏ trượt</label>
                 <label class="lbl-result" id="val8">0</label>
                 <label>(lần)</label>
               </div>
