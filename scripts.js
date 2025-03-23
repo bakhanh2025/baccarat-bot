@@ -4,6 +4,18 @@ let roadmapMatrix = {};
 let result = {};
 let sumResult = [];
 
+let labels = {
+    0: "2 lỗ đóng lại",
+    1: "3 lỗ đóng lại",
+    2: "3 Xanh đóng lại",
+    3: "3 Đỏ đóng lại",
+    4: "Đỏ 1 lỗ",
+    5: "Xanh 4 đóng",
+    6: "Đỏ 4 đóng",
+    7: "2 Xanh trượt",
+    8: "2 Đỏ trượt"
+}
+
 $(document).ready(function () {
     init();
 });
@@ -363,9 +375,29 @@ function sumMatrix() {
 }
 
 function displayResult() {
-    for (let i = 0; i < sumResult.length; i++) {
-        $(`#val${i}`).text(sumResult[i]);
+    let sortedResult = buildOrderResult();
+    $(".result").empty();
+    for (let i = 0; i < sortedResult.length; i++) {
+        const element = sortedResult[i];
+        let html = `<div class="result-item">
+                        <label class="lbl">${i + 1}/ ${labels[element.key]}</label>
+                        <label class="lbl-result" id="val0">${element.value}</label>
+                        <label>(lần)</label>
+                    </div>`;
+        $(".result").append(html);
     }
+}
+
+function buildOrderResult() {
+    let orderResult = [];
+    for (let i = 0; i < sumResult.length; i++) {
+        orderResult.push({
+            key: i,
+            value: sumResult[i]
+        })
+    }
+    const sortedDesc = orderResult.sort((a, b) => b.value - a.value);
+    return sortedDesc;
 }
 
 function calMethod1(matrix) {
@@ -481,16 +513,12 @@ function calMethod9(matrix) {
 }
 
 function sendMessageToTelegram() {
-    let message = `Tổng số bàn: ${Object.keys(roadmapData).length} (bàn)\n` +
-        `1/ 2 lỗ đóng lại: ${sumResult[0]} (lần)\n` +
-        `2/ 3 lỗ đóng lại: ${sumResult[1]} (lần)\n` +
-        `3/ 3 Xanh đóng lại: ${sumResult[2]} (lần)\n` +
-        `4/ 3 Đỏ đóng lại: ${sumResult[3]} (lần)\n` +
-        `5/ Đỏ 1 lỗ: ${sumResult[4]} (lần)\n` +
-        `6/ Xanh 4 đóng: ${sumResult[5]} (lần)\n` +
-        `7/ Đỏ 4 đóng: ${sumResult[6]} (lần)\n` +
-        `8/ 2 Xanh trượt: ${sumResult[7]} (lần)\n` +
-        `9/ 2 Đỏ trượt: ${sumResult[8]} (lần)`;
+    let sortedResult = buildOrderResult();
+    let message = `Tổng số bàn: ${Object.keys(roadmapData).length} (bàn)`;
+    for (let i = 0; i < sortedResult.length; i++) {
+        const element = sortedResult[i];
+        message += `\n${i + 1}/ ${labels[element.key]}: ${element.value} (lần)`;
+    }
     sendMessage(message);
 }
 
