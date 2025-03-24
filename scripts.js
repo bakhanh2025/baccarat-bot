@@ -536,18 +536,32 @@ function calMethod7(matrix) {
     return bankerCount;
 }
 
+function countPattern2(matrix, startRole) {
+    const alt = role => (role === "player" ? "banker" : "player");
+    const row0 = matrix[0];
+    const row1 = matrix[1];
+    let count = 0;
+
+    for (let col = 0; col <= row0.length - 4; col++) {
+        if (
+            row0[col] === startRole && row1[col] === "" &&
+            row0[col + 1] === alt(startRole) &&
+            row0[col + 2] === startRole && row1[col + 2] === "" &&
+            row0[col + 3] === alt(startRole)
+        ) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 function calMethod8(matrix) {
-    // const playerPattern = ["player", "banker", "player", "banker"];
-    // const playerCount = countPattern(matrix, playerPattern, "banker");
-    // return playerCount;
-    return 0;
+    return countPattern2(matrix, "player");
 }
 
 function calMethod9(matrix) {
-    // const bankerPattern = ["banker", "player", "banker", "player"];
-    // const bankerCount = countPattern(matrix, bankerPattern, "player");
-    // return bankerCount;
-    return 0;
+    return countPattern2(matrix, "banker");
 }
 
 function sendMessageToTelegram() {
@@ -626,7 +640,7 @@ function loadLocalStorage() {
     if (resultTemp) result = JSON.parse(resultTemp);
 
     let sumResultTemp = localStorage.getItem(sumResultKey);
-    if (sumResultTemp) sumResult = JSON.parse(sumResultTemp);
+    sumResult = sumResultTemp ? JSON.parse(sumResultTemp) : new Array(9).fill(0);;
 }
 
 function clearLocalStorage() {
