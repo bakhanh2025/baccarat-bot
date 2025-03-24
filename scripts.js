@@ -519,13 +519,15 @@ function calMethod7(matrix) {
 }
 
 function calMethod8(matrix) {
-    let count = 0;
-    return count;
+    const playerPattern = ["player", "banker", "player", "banker"];
+    const playerCount = countPattern(matrix, playerPattern, "banker");
+    return playerCount;
 }
 
 function calMethod9(matrix) {
-    let count = 0;
-    return count;
+    const bankerPattern = ["banker", "player", "banker", "player"];
+    const bankerCount = countPattern(matrix, bankerPattern, "player");
+    return bankerCount;
 }
 
 function sendMessageToTelegram() {
