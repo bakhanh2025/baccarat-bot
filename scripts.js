@@ -477,10 +477,19 @@ function countPattern(matrix, pattern, finalValue) {
 
     for (let col = 0; col <= matrix[0].length - length; col++) {
         const mainRowMatches = pattern.every((value, i) => matrix[0][col + i] === value);
-        const secondRowEmpty = pattern.slice(0, length - 1).every((_, i) => matrix[1][col + i] === "");
-        const lastSecondRowMatch = matrix[1][col + length - 1] === finalValue;
 
-        if (mainRowMatches && secondRowEmpty && lastSecondRowMatch) {
+        const secondRowCondition = pattern.every((value, i) => {
+            if (value === finalValue) {
+                if (i === pattern.length - 1) {
+                    return matrix[1][col + i] === finalValue;
+                } else {
+                    return matrix[1][col + i] === "";
+                }
+            }
+            return true;
+        });
+
+        if (mainRowMatches && secondRowCondition) {
             count++;
         }
     }
@@ -503,6 +512,15 @@ function calMethod4(matrix) {
 
 function calMethod5(matrix) {
     let count = 0;
+    for (let col = 0; col <= matrix[0].length - 3; col++) {
+        if (
+            matrix[0][col] === "banker" &&
+            matrix[0][col + 1] === "player" &&
+            matrix[0][col + 2] === "banker"
+        ) {
+            count++;
+        }
+    }
     return count;
 }
 
@@ -519,15 +537,17 @@ function calMethod7(matrix) {
 }
 
 function calMethod8(matrix) {
-    const playerPattern = ["player", "banker", "player", "banker"];
-    const playerCount = countPattern(matrix, playerPattern, "banker");
-    return playerCount;
+    // const playerPattern = ["player", "banker", "player", "banker"];
+    // const playerCount = countPattern(matrix, playerPattern, "banker");
+    // return playerCount;
+    return 0;
 }
 
 function calMethod9(matrix) {
-    const bankerPattern = ["banker", "player", "banker", "player"];
-    const bankerCount = countPattern(matrix, bankerPattern, "player");
-    return bankerCount;
+    // const bankerPattern = ["banker", "player", "banker", "player"];
+    // const bankerCount = countPattern(matrix, bankerPattern, "player");
+    // return bankerCount;
+    return 0;
 }
 
 function sendMessageToTelegram() {
