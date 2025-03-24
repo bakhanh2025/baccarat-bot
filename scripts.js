@@ -369,7 +369,6 @@ function sumMatrix() {
         }
     }
 
-    console.log("Tổng từng cột:", colSums);
     sumResult = colSums;
     return sumResult;
 }
@@ -430,9 +429,6 @@ function calMethod1(matrix) {
         }
     }
 
-    console.log("Số pattern thỏa điều kiện:", count);
-    console.log("Vị trí bắt đầu (col):", patternPositions);
-
     return count;
 }
 
@@ -472,8 +468,6 @@ function calMethod2(matrix) {
         }
     }
 
-    console.log("Số pattern (3 cột liên tiếp) thỏa điều kiện:", count);
-    console.log("Vị trí bắt đầu (col):", patternPositions);
     return count;
 }
 
