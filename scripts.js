@@ -477,7 +477,7 @@ function calMethod2(matrix) {
     return count;
 }
 
-function count3Pattern(matrix, pattern, finalValue) {
+function countPattern(matrix, pattern, finalValue) {
     let count = 0;
     const length = pattern.length;
 
@@ -496,13 +496,13 @@ function count3Pattern(matrix, pattern, finalValue) {
 
 function calMethod3(matrix) {
     const playerPattern = ["player", "banker", "player", "banker", "player"];
-    const playerCount = count3Pattern(matrix, playerPattern, "player");
+    const playerCount = countPattern(matrix, playerPattern, "player");
     return playerCount;
 }
 
 function calMethod4(matrix) {
     const bankerPattern = ["banker", "player", "banker", "player", "banker"];
-    const bankerCount = count3Pattern(matrix, bankerPattern, "banker");
+    const bankerCount = countPattern(matrix, bankerPattern, "banker");
     return bankerCount;
 
 }
@@ -513,13 +513,15 @@ function calMethod5(matrix) {
 }
 
 function calMethod6(matrix) {
-    let count = 0;
-    return count;
+    const playerPattern = ["player", "banker", "player", "banker", "player", "banker", "player"];
+    const playerCount = countPattern(matrix, playerPattern, "player");
+    return playerCount;
 }
 
 function calMethod7(matrix) {
-    let count = 0;
-    return count;
+    const bankerPattern = ["banker", "player", "banker", "player", "banker", "player", "banker"];
+    const bankerCount = countPattern(matrix, bankerPattern, "banker");
+    return bankerCount;
 }
 
 function calMethod8(matrix) {
