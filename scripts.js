@@ -477,14 +477,34 @@ function calMethod2(matrix) {
     return count;
 }
 
-function calMethod3(matrix) {
+function count3Pattern(matrix, pattern, finalValue) {
     let count = 0;
+    const length = pattern.length;
+
+    for (let col = 0; col <= matrix[0].length - length; col++) {
+        const mainRowMatches = pattern.every((value, i) => matrix[0][col + i] === value);
+        const secondRowEmpty = pattern.slice(0, length - 1).every((_, i) => matrix[1][col + i] === "");
+        const lastSecondRowMatch = matrix[1][col + length - 1] === finalValue;
+
+        if (mainRowMatches && secondRowEmpty && lastSecondRowMatch) {
+            count++;
+        }
+    }
+
     return count;
 }
 
+function calMethod3(matrix) {
+    const playerPattern = ["player", "banker", "player", "banker", "player"];
+    const playerCount = count3Pattern(matrix, playerPattern, "player");
+    return playerCount;
+}
+
 function calMethod4(matrix) {
-    let count = 0;
-    return count;
+    const bankerPattern = ["banker", "player", "banker", "player", "banker"];
+    const bankerCount = count3Pattern(matrix, bankerPattern, "banker");
+    return bankerCount;
+
 }
 
 function calMethod5(matrix) {
