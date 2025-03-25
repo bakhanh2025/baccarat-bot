@@ -544,20 +544,23 @@ function calMethod7(matrix) {
     return bankerCount;
 }
 
-function countPattern2(matrix, startRole) {
-    const alt = role => (role === "player" ? "banker" : "player");
-    const row0 = matrix[0];
-    const row1 = matrix[1];
+function countPatternFlexible(matrix, main, secondary) {
     let count = 0;
+    let col = 0;
+    const maxCol = matrix[0].length;
 
-    for (let col = 0; col <= row0.length - 4; col++) {
+    while (col + 2 < maxCol) {
         if (
-            row0[col] === startRole && row1[col] === "" &&
-            row0[col + 1] === alt(startRole) &&
-            row0[col + 2] === startRole && row1[col + 2] === "" &&
-            row0[col + 3] === alt(startRole)
+            matrix[0][col] === main &&
+            matrix[1][col] === "" &&
+            matrix[0][col + 1] === secondary &&
+            matrix[0][col + 2] === main &&
+            matrix[1][col + 2] === ""
         ) {
             count++;
+            col += 3;
+        } else {
+            col += 1;
         }
     }
 
@@ -565,11 +568,11 @@ function countPattern2(matrix, startRole) {
 }
 
 function calMethod8(matrix) {
-    return countPattern2(matrix, "player");
+    return countPatternFlexible(matrix, "player", "banker");
 }
 
 function calMethod9(matrix) {
-    return countPattern2(matrix, "banker");
+    return countPatternFlexible(matrix, "banker", "player")
 }
 
 function sendMessageToTelegram() {
