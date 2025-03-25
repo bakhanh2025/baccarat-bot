@@ -512,13 +512,21 @@ function calMethod4(matrix) {
 
 function calMethod5(matrix) {
     let count = 0;
-    for (let col = 0; col <= matrix[0].length - 3; col++) {
+    let col = 0;
+    const maxCol = matrix[0].length;
+
+    while (col + 2 < maxCol) {
         if (
             matrix[0][col] === "banker" &&
+            matrix[1][col] === "banker" &&
             matrix[0][col + 1] === "player" &&
-            matrix[0][col + 2] === "banker"
+            matrix[0][col + 2] === "banker" &&
+            matrix[1][col + 2] === "banker"
         ) {
             count++;
+            col += 3; // Skip next 2 to avoid overlapping
+        } else {
+            col += 1;
         }
     }
     return count;
