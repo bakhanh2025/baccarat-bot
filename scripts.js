@@ -141,38 +141,142 @@ function renderRoadmapCell(roadmapId, type) {
     lastColumn.append(newCell);
 }
 
-function convertToMatrix(data, rows = 6) {
-    let matrix = [];
-    let currentColumn = [];
+// function convertToMatrix(data, rows = 6) {
+function convertToMatrix(results, maxRows = 6) {
+    // let matrix = [];
+    // let currentColumn = [];
 
-    for (let i = 0; i < data.length; i++) {
-        if (currentColumn.length < rows) {
-            // Nếu cột chưa đầy, tiếp tục thêm giá trị
-            currentColumn.push(data[i]);
+    // for (let i = 0; i < data.length; i++) {
+    //     if (currentColumn.length < rows) {
+    //         // Nếu cột chưa đầy, tiếp tục thêm giá trị
+    //         currentColumn.push(data[i]);
+    //     }
+
+    //     if (
+    //         currentColumn.length === rows ||
+    //         i === data.length - 1 ||
+    //         data[i] !== data[i + 1]
+    //     ) {
+    //         // Nếu cột đã đầy, hoặc item tiếp theo khác item hiện tại, push cột vào matrix
+    //         while (currentColumn.length < rows) {
+    //             currentColumn.push(""); // Đệm các ô trống nếu thiếu
+    //         }
+    //         matrix.push(currentColumn);
+    //         currentColumn = []; // Reset cột mới
+    //     }
+    // }
+
+    // // Chuyển từ danh sách cột sang danh sách hàng
+    // let resultMatrix = [];
+    // for (let row = 0; row < rows; row++) {
+    //     let newRow = matrix.map((col) => col[row] || ""); // Lấy từng hàng từ các cột
+    //     resultMatrix.push(newRow);
+    // }
+
+    // return resultMatrix;
+
+    const matrixCols = [];
+    const blockedPositions = new Set();
+
+    let currentCol = -1;
+    let currentRow = 0;
+    let prev = null;
+
+    function isBlocked(col, row) {
+        return blockedPositions.has(`${col},${row}`);
+    }
+
+    function blockColumn(col) {
+        for (let row = 0; row < maxRows; row++) {
+            blockedPositions.add(`${col},${row}`);
         }
+    }
 
-        if (
-            currentColumn.length === rows ||
-            i === data.length - 1 ||
-            data[i] !== data[i + 1]
-        ) {
-            // Nếu cột đã đầy, hoặc item tiếp theo khác item hiện tại, push cột vào matrix
-            while (currentColumn.length < rows) {
-                currentColumn.push(""); // Đệm các ô trống nếu thiếu
+    function isFullColumn(col, type) {
+        for (let row = 0; row < maxRows; row++) {
+            if ((matrixCols[col]?.[row] || "") !== type) return false;
+        }
+        return true;
+    }
+
+    function checkDragonPattern(fromCol, type) {
+        let count = 0;
+        for (let c = fromCol; c >= 0; c--) {
+            if (isFullColumn(c, type)) {
+                count++;
+            } else {
+                break;
             }
-            matrix.push(currentColumn);
-            currentColumn = []; // Reset cột mới
+        }
+        return count;
+    }
+
+    for (let i = 0; i < results.length; i++) {
+        const curr = results[i];
+
+        // ➤ Nếu giống kết quả trước → cố gắng đi xuống
+        if (curr === prev) {
+            if (!matrixCols[currentCol]) matrixCols[currentCol] = [];
+            const nextRow = currentRow + 1;
+
+            if (nextRow < maxRows && !matrixCols[currentCol][nextRow] && !isBlocked(currentCol, nextRow)) {
+                currentRow = nextRow;
+            } else {
+                // Không xuống được → sang phải
+                let nextCol = currentCol + 1;
+
+                // Nếu đang có Dragon Pattern → block cột kế tiếp
+                const dragonLength = checkDragonPattern(currentCol, curr);
+                if (dragonLength >= 3 && dragonLength <= 5) {
+                    blockColumn(nextCol); // Block cột kế tiếp
+                }
+
+                // Tìm cột không bị block
+                while (
+                    isBlocked(nextCol, currentRow) ||
+                    (matrixCols[nextCol] && matrixCols[nextCol][currentRow])
+                ) {
+                    nextCol++;
+                }
+
+                currentCol = nextCol;
+            }
+        } else {
+            // ➤ Kết quả khác → tìm cột đầu tiên hàng đầu trống
+            let newCol = 0;
+            while (
+                (matrixCols[newCol] && matrixCols[newCol][0]) ||
+                isBlocked(newCol, 0)
+            ) {
+                newCol++;
+            }
+            currentCol = newCol;
+            currentRow = 0;
+        }
+
+        if (!matrixCols[currentCol]) matrixCols[currentCol] = [];
+        if (!isBlocked(currentCol, currentRow)) {
+            matrixCols[currentCol][currentRow] = curr;
+        }
+
+        prev = curr;
+    }
+
+    // Chuyển sang [row][col]
+    const totalCols = matrixCols.length;
+    const matrix = Array.from({ length: maxRows }, () =>
+        Array.from({ length: totalCols }, () => "")
+    );
+
+    for (let col = 0; col < totalCols; col++) {
+        for (let row = 0; row < maxRows; row++) {
+            if (matrixCols[col]?.[row]) {
+                matrix[row][col] = matrixCols[col][row];
+            }
         }
     }
 
-    // Chuyển từ danh sách cột sang danh sách hàng
-    let resultMatrix = [];
-    for (let row = 0; row < rows; row++) {
-        let newRow = matrix.map((col) => col[row] || ""); // Lấy từng hàng từ các cột
-        resultMatrix.push(newRow);
-    }
-
-    return resultMatrix;
+    return matrix;
 }
 
 function renderRoadmap(index, matrix) {
