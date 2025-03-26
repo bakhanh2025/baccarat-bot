@@ -64,25 +64,11 @@ function calMethod4(matrix) {
 }
 
 function calMethod5(matrix) {
-    let count = 0;
-    let col = 0;
-    const maxCol = matrix[0].length;
-
-    while (col + 2 < maxCol) {
-        if (
-            matrix[0][col] === "banker" &&
-            matrix[1][col] === "banker" &&
-            matrix[0][col + 1] === "player" &&
-            matrix[0][col + 2] === "banker" &&
-            matrix[1][col + 2] === "banker"
-        ) {
-            count++;
-            col += 3; // Skip next 2 to avoid overlapping
-        } else {
-            col += 1;
-        }
-    }
-    return count;
+    let arr = matrix[1];
+    return arr.reduce((count, val, i) =>
+        val === "banker" && !arr[i + 1] && arr[i + 2] === "banker"
+            ? count + 1
+            : count, 0);
 }
 
 function calMethod6(matrix) {
