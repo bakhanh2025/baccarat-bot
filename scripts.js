@@ -582,3 +582,16 @@ document.head.insertAdjacentHTML(
             </style>
         `
 );
+
+$(document).on("click", "#btnCalculate", function () {
+    if (Object.keys(roadmapData).length) {
+        for (roadmapId in roadmapData) {
+            calMatrix(roadmapId);
+        }
+
+        sumMatrix();
+        displayResult();
+
+        saveLocalStorage();
+    }
+})

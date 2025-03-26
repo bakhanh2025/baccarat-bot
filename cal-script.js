@@ -1,37 +1,24 @@
 function calMethod1(matrix) {
-    const row0 = matrix[0];
-    const row1 = matrix[1];
-    const limit = row0.length - 2;
+    const arr = matrix[1];
     let count = 0;
 
-    for (let col = 0; col < limit; col++) {
-        if (
-            row0[col] !== "" && row1[col] === "" &&
-            row0[col + 1] !== "" && row1[col + 1] === "" &&
-            row0[col + 2] !== "" && row1[col + 2] !== ""
-        ) {
-            count++;
-        }
+    if (arr.length >= 3 && !arr[0] && !arr[1] && arr[2]) count++;
+
+    for (let i = 0; i <= arr.length - 4; i++) {
+        if (arr[i] && !arr[i + 1] && !arr[i + 2] && arr[i + 3]) count++;
     }
 
     return count;
 }
 
 function calMethod2(matrix) {
-    const row0 = matrix[0];
-    const row1 = matrix[1];
-    const limit = row0.length - 3;
+    const arr = matrix[1];
     let count = 0;
 
-    for (let col = 0; col < limit; col++) {
-        if (
-            row0[col] !== "" && row1[col] === "" &&
-            row0[col + 1] !== "" && row1[col + 1] === "" &&
-            row0[col + 2] === "" && row1[col + 2] === "" &&
-            row0[col + 3] !== "" && row1[col + 3] !== ""
-        ) {
-            count++;
-        }
+    if (arr.length >= 4 && !arr[0] && !arr[1] && !arr[2] && arr[3]) count++;
+
+    for (let i = 0; i <= arr.length - 5; i++) {
+        if (arr[i] && !arr[i + 1] && !arr[i + 2] && !arr[i + 3] && arr[i + 4]) count++;
     }
 
     return count;
