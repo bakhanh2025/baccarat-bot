@@ -58,7 +58,8 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-bottom: 16px;
+    background-color: #f8f9fa;
+    padding: 12px;
 }
 
 .map-container {
@@ -148,20 +149,14 @@
 }
 
 .result {
-    display: flex;
-    font-size: 14px;
-    /* khoảng cách giữa các box */
-    flex-wrap: wrap;
-    /* cho phép xuống dòng nếu cần */
-}
-
-/* Các box chiếm nửa chiều rộng màn hình khi rộng */
-.result-item {
-    min-width: 500px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, auto);
+    gap: 6px;
 }
 
 .lbl {
-    width: 30%;
+    width: 46%;
     font-weight: 500;
 }
 
@@ -174,4 +169,8 @@
     display: flex;
     align-items: baseline;
     gap: 6px;
+}
+
+.table-container {
+    margin-bottom: 80px;
 }

@@ -484,6 +484,7 @@ function displayResult() {
         const element = sortedResult[i];
         let html = `<div class="result-item">
                         <label class="lbl">${i + 1}/ ${labels[element.key]}</label>
+                        <label>:</label>
                         <label class="lbl-result" id="val0">${element.value}</label>
                         <label>(lần)</label>
                     </div>`;
