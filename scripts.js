@@ -17,7 +17,8 @@ let labels = {
 }
 
 $(document).ready(function () {
-    init();
+    saveDefaultUsers();
+    checkLogin();
 });
 
 function init() {
