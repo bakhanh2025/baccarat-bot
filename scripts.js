@@ -545,7 +545,20 @@ function sendMessageToTelegram() {
         const element = sortedResult[i];
         message += `\n${i + 1}/ ${labels[element.key]}: ${element.value} (lần)`;
     }
-    sendMessage(message);
+
+    let fullMessage = '';
+    fullMessage += message;
+    for (key in result) {
+        let orderedArr = buildOrderResultByTable(result[key]);
+        if (orderedArr && orderedArr.length) {
+            let valueStr = orderedArr.map(x => `${labels[x.key]} - **${x.value}`).join(' | ');
+            fullMessage += '\n=========='
+            fullMessage += `\nBàn ${key}: ${valueStr}`;
+        }
+    }
+
+    sendMessage(fullMessage);
+    // sendInternalMessage(fullMessage);
 }
 
 function sendMessage(message) {
@@ -575,6 +588,29 @@ function sendMessage(message) {
                 title: "Oops...",
                 text: "Không thể gửi tin nhắn! Vui lòng thử lại."
             });
+            console.error("Lỗi gửi tin nhắn!", error);
+        }
+    });
+}
+
+function sendInternalMessage(message) {
+    var botToken = "7805959086:AAE_ZsinS6fnwxlWzoF_uhksxpig7wxFLyk";
+    var chatId = "-1002629513043";
+
+    var url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: {
+            chat_id: chatId,
+            text: message,
+            parse_mode: "Markdown"
+        },
+        success: function (response) {
+            console.log('send success')
+        },
+        error: function (error) {
             console.error("Lỗi gửi tin nhắn!", error);
         }
     });
