@@ -24,25 +24,43 @@ function calMethod2(matrix) {
     return count;
 }
 
-function countPattern(matrix, pattern, finalValue) {
+function countPatterns34(matrix, role) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
     let count = 0;
-    const length = pattern.length;
 
-    for (let col = 0; col <= matrix[0].length - length; col++) {
-        const mainRowMatches = pattern.every((value, i) => matrix[0][col + i] === value);
+    const opposite = role === "player" ? "banker" : "player";
 
-        const secondRowCondition = pattern.every((value, i) => {
-            if (value === finalValue) {
-                if (i === pattern.length - 1) {
-                    return matrix[1][col + i] === finalValue;
-                } else {
-                    return matrix[1][col + i] === "";
-                }
-            }
-            return true;
-        });
+    if (
+        rows > 1 && cols > 3 &&
+        matrix[0][0] === role &&
+        !matrix[1][0] &&
+        !matrix[1][2] &&
+        matrix[1][4] === role
+    ) {
+        count++;
+    }
 
-        if (mainRowMatches && secondRowCondition) {
+    if (
+        rows > 1 && cols > 5 &&
+        matrix[0][0] === opposite &&
+        !matrix[1][1] &&
+        !matrix[1][3] &&
+        matrix[1][5] === role
+    ) {
+        count++;
+    }
+
+    for (let col = 6; col < cols; col++) {
+        if (
+            matrix[1][col] === role &&
+            !matrix[1][col - 2] &&
+            !matrix[1][col - 4] &&
+            (
+                matrix[1][col - 5] === opposite ||
+                matrix[1][col - 6] === role
+            )
+        ) {
             count++;
         }
     }
@@ -51,16 +69,11 @@ function countPattern(matrix, pattern, finalValue) {
 }
 
 function calMethod3(matrix) {
-    const playerPattern = ["player", "banker", "player", "banker", "player"];
-    const playerCount = countPattern(matrix, playerPattern, "player");
-    return playerCount;
+    return countPatterns34(matrix, "player");
 }
 
 function calMethod4(matrix) {
-    const bankerPattern = ["banker", "player", "banker", "player", "banker"];
-    const bankerCount = countPattern(matrix, bankerPattern, "banker");
-    return bankerCount;
-
+    return countPatterns34(matrix, "banker");
 }
 
 function calMethod5(matrix) {
@@ -71,16 +84,59 @@ function calMethod5(matrix) {
             : count, 0);
 }
 
+function countPatterns67(matrix, role) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    let count = 0;
+
+    const opposite = role === "player" ? "banker" : "player";
+
+    if (
+        rows > 1 && cols > 6 &&
+        matrix[0][0] === role &&
+        !matrix[1][0] &&
+        !matrix[1][2] &&
+        !matrix[1][4] &&
+        matrix[1][6] === role
+    ) {
+        count++;
+    }
+
+    if (
+        rows > 1 && cols > 7 &&
+        matrix[0][0] === opposite &&
+        !matrix[1][1] &&
+        !matrix[1][3] &&
+        !matrix[1][5] &&
+        matrix[1][7] === role
+    ) {
+        count++;
+    }
+
+    for (let col = 8; col < cols; col++) {
+        if (
+            matrix[1][col] === role &&
+            !matrix[1][col - 2] &&
+            !matrix[1][col - 4] &&
+            !matrix[1][col - 6] &&
+            (
+                matrix[1][col - 7] === opposite ||
+                matrix[1][col - 8] === role
+            )
+        ) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 function calMethod6(matrix) {
-    const playerPattern = ["player", "banker", "player", "banker", "player", "banker", "player"];
-    const playerCount = countPattern(matrix, playerPattern, "player");
-    return playerCount;
+    return countPatterns67(matrix, "player");
 }
 
 function calMethod7(matrix) {
-    const bankerPattern = ["banker", "player", "banker", "player", "banker", "player", "banker"];
-    const bankerCount = countPattern(matrix, bankerPattern, "banker");
-    return bankerCount;
+    return countPatterns67(matrix, "banker");
 }
 
 function countPatternFlexible(matrix, main, secondary) {
