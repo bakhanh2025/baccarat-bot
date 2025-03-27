@@ -26,6 +26,7 @@ function init() {
     displayTotalTable();
     renderRoadmapFromLocalStorage();
     displayResult();
+    displayResultByTable();
 }
 
 $(document).on("click", "#check-roadmap", function () {
@@ -99,6 +100,7 @@ $(document).on("click", ".add-cell", function () {
     calMatrix(roadmapId);
     sumMatrix();
     displayResult();
+    displayResultByTable();
 
     saveLocalStorage();
 });
@@ -122,6 +124,7 @@ $(document).on("click", ".del-last-cell", function () {
     calMatrix(roadmapId);
     sumMatrix();
     displayResult();
+    displayResultByTable();
 
     saveLocalStorage();
 });
@@ -339,6 +342,7 @@ function deleteTable(indexTable) {
             delete result[indexTable];
             sumMatrix();
             displayResult();
+            displayResultByTable();
             saveLocalStorage();
             displayTotalTable();
             $(`#roadmap-${indexTable}`).remove();
@@ -493,6 +497,35 @@ function displayResult() {
     }
 }
 
+function displayResultByTable() {
+    $(".result-by-table").empty();
+
+    for (key in result) {
+        let orderedArr = buildOrderResultByTable(result[key]);
+        if (orderedArr && orderedArr.length) {
+            let valueStr = orderedArr.map(x => `${labels[x.key]} - <span class="val-item-count">${x.value}</span>`).join(' | ');
+            let html = `<div class="result-by-table-item">
+                            <label class="lbl-tableName">Bàn ${key}</label>
+                            <label>:</label>
+                            <label class="lbl-result-by-table-item">${valueStr}</label>
+                        </div>`;
+            $(".result-by-table").append(html);
+        }
+    }
+}
+
+function buildOrderResultByTable(arr) {
+    let orderResult = [];
+    arr.forEach((item, index) => {
+        if (parseInt(item) > 0) orderResult.push({
+            key: index,
+            value: item
+        })
+    });
+    const sortedDesc = orderResult.sort((a, b) => b.value - a.value);
+    return sortedDesc;
+}
+
 function buildOrderResult() {
     let orderResult = [];
     for (let i = 0; i < sumResult.length; i++) {
@@ -592,6 +625,7 @@ $(document).on("click", "#btnCalculate", function () {
 
         sumMatrix();
         displayResult();
+        displayResultByTable();
 
         saveLocalStorage();
     }

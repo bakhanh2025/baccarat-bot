@@ -171,3 +171,18 @@
 .table-container {
     margin-bottom: 80px;
 }
+
+.result-by-table-item {
+    display: flex;
+    gap: 10px;
+}
+
+.lbl-tableName {
+    min-width: 80px;
+    font-weight: 500;
+}
+
+.val-item-count {
+    color: red;
+    font-weight: 500;
+}
