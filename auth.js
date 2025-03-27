@@ -1,11 +1,9 @@
 const secretKey = "superSecretKey123!";
 
-// Mã hóa AES
 function encryptAES(data) {
   return CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
 }
 
-// Giải mã AES
 function decryptAES(data) {
   try {
     const bytes = CryptoJS.AES.decrypt(data, secretKey);
@@ -15,7 +13,6 @@ function decryptAES(data) {
   }
 }
 
-// Tạo user mẫu (nếu chưa có)
 function saveDefaultUsers() {
   localStorage.setItem("user_accounts", "U2FsdGVkX1/R2RVobHj7Rm4frMYEgxUY0jvmxy48EeDAxWSYxEjoYxLaRlJHeWmC90aA6P4JuzjnIYUZtvz2EcEIZ+yJJ4nUiWXfIj2MinS06iHCoYDJLuJlDZavjRPbLeVX6Xb+GZCdMQFoj07nEKQi/+ynDSBDDPBt0eH7SD+fkftXPNRbvcgtTAPReQ9RHe6vXHERdHMeKcM7E7+lnnzoW7PIFeTKWymw3HB8EEYOvbdnHxbt/t4sEF6WmwJSZR5+mRQbJ3ESS4Z+qjUWFEvvzgsoPlS+BsV59eE0mjU=")
 }
