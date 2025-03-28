@@ -120,7 +120,6 @@
 .roadmap {
     flex: 1 1 45%;
     min-width: 300px;
-    max-width: 49%;
     box-sizing: border-box;
     border: 1px solid #ddd;
     padding: 10px;
