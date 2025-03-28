@@ -512,10 +512,11 @@ function displayResult() {
 }
 
 function buildResultOrder(data) {
+    const columns = [];
+    if (!data || !Object.keys(data).length) return columns;
+
     const keys = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
     const numCols = data[keys[0]].length;
-
-    const columns = [];
 
     for (let i = 0; i < numCols; i++) {
         const column = keys

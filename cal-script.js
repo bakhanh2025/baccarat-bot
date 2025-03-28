@@ -144,13 +144,14 @@ function countPatternFlexible(matrix, main, secondary) {
     let col = 0;
     const maxCol = matrix[0].length;
 
-    while (col + 2 < maxCol) {
+    while (col + 3 < maxCol) {
         if (
             matrix[0][col] === main &&
             matrix[1][col] === "" &&
             matrix[0][col + 1] === secondary &&
             matrix[0][col + 2] === main &&
-            matrix[1][col + 2] === ""
+            matrix[1][col + 2] === "" &&
+            matrix[0][col + 3] !== ""
         ) {
             count++;
             col += 3;
