@@ -51,24 +51,24 @@ function checkLogin() {
             <div class="map-box2 result"></div>
           </div>
         </div>
-      </div>
+      </div>` +
+      // <div class="ml20 mt20 mr20">
+      //   <div class="roadmap-container">
+      //     <div class="roadmap" id="roadmap-result-by-table">
+      //       <div class="header-card">
+      //         <div class="tb-header">
+      //           <h6>Kết quả theo bàn </h6>
+      //           <span>- Tổng số bàn: </span>
+      //           <span class="lblTotalTable">0</span>
+      //         </div>
+      //       </div>
+      //       <hr style="margin-top: 8px" />
+      //       <div class="map-box2 result-by-table"></div>
+      //     </div>
+      //   </div>
+      // </div>
 
-      <div class="ml20 mt20 mr20">
-        <div class="roadmap-container">
-          <div class="roadmap" id="roadmap-result-by-table">
-            <div class="header-card">
-              <div class="tb-header">
-                <h6>Kết quả theo bàn </h6>
-                <span>- Tổng số bàn: </span>
-                <span class="lblTotalTable">0</span>
-              </div>
-            </div>
-            <hr style="margin-top: 8px" />
-            <div class="map-box2 result-by-table"></div>
-          </div>
-        </div>
-      </div>
-      
+      `
       <div class="ml20 mt20 mr20 table-container">
         <div class="roadmap-container" id="roadmaps"></div>
       </div>

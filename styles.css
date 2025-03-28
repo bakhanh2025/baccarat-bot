@@ -137,23 +137,12 @@
     border: 1px solid #ddd;
 }
 
-.result {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(3, auto);
-    gap: 6px;
-}
-
-@media (max-width: 768px) {
-    .result {
-        grid-auto-flow: row;
-        grid-template-rows: none;
-        grid-template-columns: 1fr;
-    }
+.result-item {
+    display: flex;
+    gap: 16px;
 }
 
 .lbl {
-    width: 46%;
     font-weight: 500;
 }
 
@@ -185,4 +174,55 @@
 .val-item-count {
     color: red;
     font-weight: 500;
+}
+
+.lbl-time {
+    width: 10%;
+}
+
+#roadmap-result {
+    max-width: none !important;
+}
+
+.aaa {
+    display: flex;
+    gap: 10px;
+}
+
+.bbb {
+    display: flex;
+    gap: 10px;
+}
+
+.ccc {
+    width: 10%;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+    .ccc {
+        width: 20%;
+    }
+}
+
+@media (max-width: 768px) {
+    .result-item {
+        flex-direction: column;
+        margin-top: 14px;
+    }
+
+    .ccc {
+        width: 45%;
+    }
+
+    .lbl-result-gr {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+.lbl-result-gr {
+    width: 10%;
+    min-width: 60px;
 }

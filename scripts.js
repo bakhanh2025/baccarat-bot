@@ -26,7 +26,6 @@ function init() {
     displayTotalTable();
     renderRoadmapFromLocalStorage();
     displayResult();
-    displayResultByTable();
 }
 
 $(document).on("click", "#check-roadmap", function () {
@@ -100,7 +99,6 @@ $(document).on("click", ".add-cell", function () {
     calMatrix(roadmapId);
     sumMatrix();
     displayResult();
-    displayResultByTable();
 
     saveLocalStorage();
 });
@@ -124,7 +122,6 @@ $(document).on("click", ".del-last-cell", function () {
     calMatrix(roadmapId);
     sumMatrix();
     displayResult();
-    displayResultByTable();
 
     saveLocalStorage();
 });
@@ -342,7 +339,6 @@ function deleteTable(indexTable) {
             delete result[indexTable];
             sumMatrix();
             displayResult();
-            displayResultByTable();
             saveLocalStorage();
             displayTotalTable();
             $(`#roadmap-${indexTable}`).remove();
@@ -485,45 +481,53 @@ function sumMatrix() {
 function displayResult() {
     let sortedResult = buildOrderResult();
     $(".result").empty();
+    let resultByTable = buildResultOrder(result);
+
     for (let i = 0; i < sortedResult.length; i++) {
         const element = sortedResult[i];
+
+        let resultByTableStr = ``;
+        if (resultByTable[element.key] && resultByTable[element.key].length)
+            resultByTableStr += `
+                <div class="bbb">
+                    <label> | </label>
+                    <label> ${resultByTable[element.key].map(x => `Bàn ${x.key} (<span class="val-item-count">${x.value}</span>)`).join(", ")} </label>
+                </div>`;
+
         let html = `<div class="result-item">
-                        <label class="lbl">${i + 1}/ ${labels[element.key]}</label>
-                        <label>:</label>
-                        <label class="lbl-result" id="val0">${element.value}</label>
-                        <label>(lần)</label>
+                        <div class="ccc">
+                            <label class="lbl">${i + 1}/ ${labels[element.key]}</label>
+                            <label>:</label>
+                        </div>
+                        <div class="aaa">
+                            <div class="lbl-result-gr">
+                                <label class="lbl-result" id="val0">${element.value}</label>
+                                <label class="lbl-time">(lần)</label>
+                            </div>
+                        <div>
+                        ${resultByTableStr}
                     </div>`;
         $(".result").append(html);
     }
 }
 
-function displayResultByTable() {
-    $(".result-by-table").empty();
+function buildResultOrder(data) {
+    const keys = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
+    const numCols = data[keys[0]].length;
 
-    for (key in result) {
-        let orderedArr = buildOrderResultByTable(result[key]);
-        if (orderedArr && orderedArr.length) {
-            let valueStr = orderedArr.map(x => `${labels[x.key]} - <span class="val-item-count">${x.value}</span>`).join(' | ');
-            let html = `<div class="result-by-table-item">
-                            <label class="lbl-tableName">Bàn ${key}</label>
-                            <label>:</label>
-                            <label class="lbl-result-by-table-item">${valueStr}</label>
-                        </div>`;
-            $(".result-by-table").append(html);
-        }
+    const columns = [];
+
+    for (let i = 0; i < numCols; i++) {
+        const column = keys
+            .map(key => ({
+                key: key,
+                value: data[key][i]
+            }))
+            .filter(item => item.value !== 0)
+            .sort((a, b) => b.value - a.value);  // ✅ sort giảm dần
+        columns.push(column);
     }
-}
-
-function buildOrderResultByTable(arr) {
-    let orderResult = [];
-    arr.forEach((item, index) => {
-        if (parseInt(item) > 0) orderResult.push({
-            key: index,
-            value: item
-        })
-    });
-    const sortedDesc = orderResult.sort((a, b) => b.value - a.value);
-    return sortedDesc;
+    return columns
 }
 
 function buildOrderResult() {
@@ -540,25 +544,21 @@ function buildOrderResult() {
 
 function sendMessageToTelegram() {
     let sortedResult = buildOrderResult();
+    let resultByTable = buildResultOrder(result);
+
     let message = `Tổng số bàn: ${Object.keys(roadmapData).length} (bàn)`;
     for (let i = 0; i < sortedResult.length; i++) {
         const element = sortedResult[i];
-        message += `\n${i + 1}/ ${labels[element.key]}: ${element.value} (lần)`;
+
+        let resultByTableStr = ``;
+        if (resultByTable[element.key] && resultByTable[element.key].length)
+            resultByTableStr += ` | ${resultByTable[element.key].map(x => `Bàn ${x.key} (${x.value})`).join(", ")}`;
+
+        message += `\n${i + 1}/ ${labels[element.key]}: ${element.value} (lần) ${resultByTableStr}`;
     }
 
-    let fullMessage = '';
-    fullMessage += message;
-    for (key in result) {
-        let orderedArr = buildOrderResultByTable(result[key]);
-        if (orderedArr && orderedArr.length) {
-            let valueStr = orderedArr.map(x => `${labels[x.key]} - **${x.value}`).join(' | ');
-            fullMessage += '\n=========='
-            fullMessage += `\nBàn ${key}: ${valueStr}`;
-        }
-    }
-
-    sendMessage(fullMessage);
-    // sendInternalMessage(fullMessage);
+    sendMessage(message);
+    // sendInternalMessage(message);
 }
 
 function sendMessage(message) {
@@ -661,7 +661,6 @@ $(document).on("click", "#btnCalculate", function () {
 
         sumMatrix();
         displayResult();
-        displayResultByTable();
 
         saveLocalStorage();
     }
