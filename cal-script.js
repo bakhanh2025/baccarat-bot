@@ -56,10 +56,7 @@ function countPatterns34(matrix, role) {
             matrix[1][col] === role &&
             !matrix[1][col - 2] &&
             !matrix[1][col - 4] &&
-            (
-                matrix[1][col - 5] === opposite ||
-                matrix[1][col - 6] === role
-            )
+            matrix[1][col - 6] === role
         ) {
             count++;
         }
@@ -119,10 +116,7 @@ function countPatterns67(matrix, role) {
             !matrix[1][col - 2] &&
             !matrix[1][col - 4] &&
             !matrix[1][col - 6] &&
-            (
-                matrix[1][col - 7] === opposite ||
-                matrix[1][col - 8] === role
-            )
+            matrix[1][col - 8] === role
         ) {
             count++;
         }
