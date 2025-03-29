@@ -21,7 +21,7 @@ function loadLocalStorage() {
     if (resultTemp) result = JSON.parse(resultTemp);
 
     let sumResultTemp = localStorage.getItem(sumResultKey);
-    sumResult = sumResultTemp ? JSON.parse(sumResultTemp) : new Array(9).fill(0);;
+    sumResult = sumResultTemp ? JSON.parse(sumResultTemp) : new Array(9).fill(0);
 }
 
 function clearLocalStorage() {

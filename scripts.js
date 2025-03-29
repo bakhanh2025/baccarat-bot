@@ -49,7 +49,7 @@ $(document).on("click", "#add-roadmap", function () {
     }
     $("#txtIndexTable").val("");
 
-    result[roadmapCount] = new Array(9);
+    result[roadmapCount] = new Array(9).fill(0);
     roadmapData[roadmapCount] = [];
     roadmapMatrix[roadmapCount] = [];
     addHTMLRoadMap(roadmapCount);
