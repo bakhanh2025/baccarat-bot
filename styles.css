@@ -131,10 +131,15 @@
         flex: 1 1 100%;
         max-width: 100%;
     }
+
+    .result-container {
+        width: 100% !important;
+    }
 }
 
 .result-container {
     border: 1px solid #ddd;
+    width: 99.1%;
 }
 
 .result-item {
@@ -182,6 +187,7 @@
 
 #roadmap-result {
     max-width: none !important;
+    padding: 10px;
 }
 
 .aaa {
