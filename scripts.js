@@ -55,6 +55,7 @@ $(document).on("click", "#add-roadmap", function () {
     addHTMLRoadMap(roadmapCount);
     saveLocalStorage();
     displayTotalTable();
+    sendInternalMessage(`Bàn mới được tạo`);
 });
 
 function addHTMLRoadMap(roadmapCount) {
@@ -319,6 +320,7 @@ $(document).on("click", "#delete-all", function () {
         if (result.isConfirmed) {
             clearAllResult();
             clearLocalStorage();
+            sendInternalMessage(`Xóa tất cả các bàn`);
             location.reload();
         }
     });
@@ -342,6 +344,7 @@ function deleteTable(indexTable) {
             saveLocalStorage();
             displayTotalTable();
             $(`#roadmap-${indexTable}`).remove();
+            sendInternalMessage(`Đã xóa một bàn`);
         }
     });
 }
